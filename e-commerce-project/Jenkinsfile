@@ -10,7 +10,6 @@ pipeline {
             steps {
                 sshagent(credentials: ['a62e3b2d-ef75-49ae-936e-8726be843a9a']) {
                     sh 'git pull'
-                    # Copy the HTML file to the GCP instance
                     scp -o StrictHostKeyChecking=no index.html <devopsdemo>@<35.236.250.35>:/var/www/html/
                     '''
                 }
