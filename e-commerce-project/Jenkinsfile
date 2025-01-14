@@ -8,10 +8,10 @@ pipeline {
         }
         stage('Deploy to GCP') {
             steps {
-                sshagent(['a62e3b2d-ef75-49ae-936e-8726be843a9a']) { //credential ID
+                withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_LOGIN', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
-                    # Copy the index.html file to the remote server
-                    scp -o StrictHostKeyChecking=no index.html devopsdemo@35.236.250.35:/var/www/html/
+                    # Using username and password to authenticate for SCP
+                    sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no index.html $USERNAME@35.236.250.35:/var/www/html/
                     '''
                 }
             }
