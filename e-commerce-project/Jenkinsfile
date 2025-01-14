@@ -11,7 +11,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'DOCKER_HUB_LOGIN', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''
                     # Using username and password to authenticate for SCP
-                    sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no index.html $USERNAME@35.236.250.35:/var/www/html/
+                    sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no index.html $USERNAME@35.221.1.193:/var/www/html/
                     '''
                 }
             }
