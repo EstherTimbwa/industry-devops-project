@@ -1,0 +1,7 @@
+- hosts: all
+  tasks:
+    - name: Deploy Docker container
+      docker_container:
+        name: retail-app
+        image: abc-retail-app
+        state: started
