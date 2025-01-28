@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_HUB_REPO = 'essy09/abc-retail-app'
         DOCKER_HUB_CREDENTIALS = 'DOCKER_HUB_PWD'  // This is the ID of the stored Jenkins credentials
-        KUBERNETES_CONFIG = '/root/.kube/config' 
+        KUBERNETES_CONFIG = '/home/jenkins/.kube/config' 
         ANSIBLE_PLAYBOOK_PATH = 'ABC Technologies/deploy/deploy.yml'  // Fixed the path here
     }
 
