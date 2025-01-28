@@ -5,7 +5,7 @@ pipeline {
         DOCKER_HUB_REPO = 'essy09/abc-retail-app'
         DOCKER_HUB_CREDENTIALS = 'DOCKER_HUB_PWD'  // This is the ID of the stored Jenkins credentials
         KUBERNETES_CONFIG = '/home/jenkins/.kube/config' 
-        ANSIBLE_PLAYBOOK_PATH = 'ABC Technologies/deploy/deploy.yml'  // Fixed the path here
+        ANSIBLE_PLAYBOOK_PATH = 'ABC Technologies/deploy/deploy.yml' 
     }
 
     stages {
@@ -20,8 +20,8 @@ pipeline {
             steps {
                 echo 'Building application...'
                 dir('ABC Technologies') {
-                    sh 'pwd'  // Check current directory
-                    sh 'ls -la'  // List files in the directory to ensure the correct files are there
+                    sh 'pwd' 
+                    sh 'ls -la' 
                     sh 'mvn clean compile'
                 }
             }
@@ -51,7 +51,6 @@ pipeline {
                 echo 'Building and pushing Docker image...'
                 script {
                     dir('ABC Technologies') {
-                        // Use withCredentials to securely inject Docker credentials
                         withCredentials([usernamePassword(credentialsId: 'DOCKER_HUB_PWD', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                             sh '''
                             docker build -t $DOCKER_HUB_REPO:latest .
