@@ -17,9 +17,11 @@ pipeline {
         }
 
         stage('Build Application') {
-            echo 'Building application...'
-            dir('industry-devops-project/ABC Technologies') {
-                sh 'mvn clean compile'
+            steps {
+                echo 'Building application...'
+                dir('industry-devops-project/ABC Technologies') {
+                    sh 'mvn clean compile'
+                }
             }
         }
 
