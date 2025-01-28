@@ -4,8 +4,8 @@ pipeline {
     environment {
         DOCKER_HUB_REPO = 'essy09/abc-retail-app'
         DOCKER_HUB_CREDENTIALS = 'DOCKER_HUB_PWD'
-        KUBERNETES_CONFIG = '/root/.kube/config'
-        ANSIBLE_PLAYBOOK_PATH = '/root/industry-devops-project/ABC Technologies/deploy/deploy.yml'
+        KUBERNETES_CONFIG = '/root/.kube/config' 
+        ANSIBLE_PLAYBOOK_PATH = 'industry-devops-project/ABC Technologies/deploy/deploy.yml' // Relative path
     }
 
     stages {
@@ -48,11 +48,11 @@ pipeline {
             steps {
                 echo 'Building and pushing Docker image...'
                 script {
-                    dir('industry-devops-project/ABC Technologies') {
+                    dir('industry-devops-project/ABC Technologies') { 
                         sh '''
-                        docker build -t essy09/abc-retail-app:latest .
+                        docker build -t $DOCKER_HUB_REPO:latest .
                         docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-                        docker push essy09/abc-retail-app:latest
+                        docker push $DOCKER_HUB_REPO:latest
                         '''
                     }
                 }
