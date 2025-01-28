@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: abc-retail-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: abc-retail-app
+  template:
+    metadata:
+      labels:
+        app: abc-retail-app
+    spec:
+      containers:
+      - name: abc-retail-app
+        image: essy09/abc-retail-app:latest
+        ports:
+        - containerPort: 8080
+

@@ -1,0 +1,7 @@
+- name: Deploy application
+  hosts: localhost
+  tasks:
+    - name: Pull Docker image
+      shell: docker pull essy09/abc-retail-app:latest
+    - name: Run Docker container
+      shell: docker run -d -p 8080:8080 essy09/abc-retail-app:latest

@@ -1,0 +1,80 @@
+pipeline {
+    agent any
+
+    environment {
+        DOCKER_HUB_REPO = 'essy09/abc-retail-app'
+        DOCKER_HUB_CREDENTIALS = 'DOCKER_HUB_PWD'
+        KUBERNETES_CONFIG = '/root/.kube/config'
+        ANSIBLE_PLAYBOOK_PATH = '/root/industry-devops-project/ABC Technologies/deploy/deploy.yml'
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/EstherTimbwa/industry-devops-project.git', branch: 'master'
+            }
+        }
+
+        stage('Build Application') {
+            steps {
+                sh 'mvn clean compile'
+            }
+        }
+
+        stage('Test Application') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package Application') {
+            steps {
+                sh 'mvn package'
+                archiveArtifacts artifacts: 'target/*.war', fingerprint: true
+            }
+        }
+
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    sh '''
+                    docker build -t essy09/abc-retail-app:latest .
+                    docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+                    docker push essy09/abc-retail-app:latest
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy with Ansible') {
+            steps {
+                ansiblePlaybook installation: 'Ansible', playbook: ANSIBLE_PLAYBOOK_PATH
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    sh '''
+                    export KUBECONFIG=$KUBERNETES_CONFIG
+                    kubectl apply -f deployment.yml
+                    kubectl apply -f service.yml
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs for details.'
+        }
+    }
+}
+
