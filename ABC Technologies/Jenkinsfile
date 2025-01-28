@@ -5,7 +5,7 @@ pipeline {
         DOCKER_HUB_REPO = 'essy09/abc-retail-app'
         DOCKER_HUB_CREDENTIALS = 'DOCKER_HUB_PWD'
         KUBERNETES_CONFIG = '/root/.kube/config' 
-        ANSIBLE_PLAYBOOK_PATH = 'industry-devops-project/ABC Technologies/deploy/deploy.yml' // Relative path
+        ANSIBLE_PLAYBOOK_PATH = 'industry-devops-project/ABC Technologies/deploy/deploy.yml'
     }
 
     stages {
@@ -20,6 +20,10 @@ pipeline {
             steps {
                 echo 'Building application...'
                 dir('industry-devops-project/ABC Technologies') {
+                    // Debug: Check current directory
+                    sh 'pwd'
+                    // Debug: List files in the directory to ensure pom.xml is there
+                    sh 'ls -la'
                     sh 'mvn clean compile'
                 }
             }
@@ -72,13 +76,14 @@ pipeline {
                 script {
                     sh '''
                     export KUBECONFIG=$KUBERNETES_CONFIG
+                    ls -la
                     kubectl apply -f deployment.yml
                     kubectl apply -f service.yml
                     '''
                 }
             }
         }
-    } // End of stages
+    }
 
     post {
         always {
@@ -91,5 +96,5 @@ pipeline {
         failure {
             echo 'Pipeline failed. Check logs for details.'
         }
-    } // End of post
-} // End of pipeline
+    }
+}
