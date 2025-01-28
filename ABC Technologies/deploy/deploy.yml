@@ -1,7 +1,18 @@
+---
 - name: Deploy application
   hosts: localhost
   tasks:
     - name: Pull Docker image
-      shell: docker pull essy09/abc-retail-app:latest
-    - name: Run Docker container
-      shell: docker run -d -p 8080:8080 essy09/abc-retail-app:latest
+      docker_image:
+        name: essy09/abc-retail-app
+        tag: latest
+        source: pull
+
+    - name: Run Docker container on port 8082
+      docker_container:
+        name: abc-retail-app
+        image: essy09/abc-retail-app:latest
+        state: started
+        restart_policy: always
+        published_ports:
+          - "8082:8080"
