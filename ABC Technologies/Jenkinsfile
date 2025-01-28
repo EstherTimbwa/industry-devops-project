@@ -19,10 +19,8 @@ pipeline {
         stage('Build Application') {
             steps {
                 echo 'Building application...'
-                dir('industry-devops-project/ABC Technologies') {
-                    // Debug: Check current directory
+                dir('ABC Technologies') {
                     sh 'pwd'
-                    // Debug: List files in the directory to ensure pom.xml is there
                     sh 'ls -la'
                     sh 'mvn clean compile'
                 }
