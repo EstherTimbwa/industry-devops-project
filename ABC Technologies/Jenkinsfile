@@ -16,16 +16,18 @@ pipeline {
             }
         }
 
-        stage('Build Application') {
-            steps {
-                echo 'Building application...'
-                sh 'mvn clean compile'
-            }
-        }
+       stage('Build Application') {
+          echo 'Building application...'
+          dir('industry-devops-project/ABC Technologies') {
+          sh 'mvn clean compile'
+    }
+}
+
 
         stage('Test Application') {
             steps {
                 echo 'Running tests...'
+                dir('industry-devops-project/ABC Technologies') {
                 sh 'mvn test'
             }
         }
@@ -42,6 +44,7 @@ pipeline {
             steps {
                 echo 'Building and pushing Docker image...'
                 script {
+                    dir('industry-devops-project/ABC Technologies') {
                     sh '''
                     docker build -t essy09/abc-retail-app:latest .
                     docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
@@ -50,6 +53,7 @@ pipeline {
                 }
             }
         }
+    }
 
         stage('Deploy with Ansible') {
             steps {
