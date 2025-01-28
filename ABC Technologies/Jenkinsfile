@@ -68,7 +68,7 @@ pipeline {
             steps {
                 echo 'Deploying with Ansible...'
                 script {
-                    sh 'ls -la ABC Technologies/deploy'
+                    sh 'ls -la "ABC Technologies/deploy"'
                     ansiblePlaybook installation: 'Ansible', playbook: ANSIBLE_PLAYBOOK_PATH
                 }
             }
