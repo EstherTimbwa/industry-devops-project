@@ -16,27 +16,29 @@ pipeline {
             }
         }
 
-       stage('Build Application') {
-          echo 'Building application...'
-          dir('industry-devops-project/ABC Technologies') {
-          sh 'mvn clean compile'
-    }
-}
-
+        stage('Build Application') {
+            echo 'Building application...'
+            dir('industry-devops-project/ABC Technologies') {
+                sh 'mvn clean compile'
+            }
+        }
 
         stage('Test Application') {
             steps {
                 echo 'Running tests...'
                 dir('industry-devops-project/ABC Technologies') {
-                sh 'mvn test'
+                    sh 'mvn test'
+                }
             }
         }
 
         stage('Package Application') {
             steps {
                 echo 'Packaging application...'
-                sh 'mvn package'
-                archiveArtifacts artifacts: 'target/*.war', fingerprint: true
+                dir('industry-devops-project/ABC Technologies') {
+                    sh 'mvn package'
+                    archiveArtifacts artifacts: 'target/*.war', fingerprint: true
+                }
             }
         }
 
@@ -45,15 +47,15 @@ pipeline {
                 echo 'Building and pushing Docker image...'
                 script {
                     dir('industry-devops-project/ABC Technologies') {
-                    sh '''
-                    docker build -t essy09/abc-retail-app:latest .
-                    docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-                    docker push essy09/abc-retail-app:latest
-                    '''
+                        sh '''
+                        docker build -t essy09/abc-retail-app:latest .
+                        docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+                        docker push essy09/abc-retail-app:latest
+                        '''
+                    }
                 }
             }
         }
-    }
 
         stage('Deploy with Ansible') {
             steps {
@@ -74,7 +76,7 @@ pipeline {
                 }
             }
         }
-    }
+    } // End of stages
 
     post {
         always {
@@ -87,5 +89,5 @@ pipeline {
         failure {
             echo 'Pipeline failed. Check logs for details.'
         }
-    }
-}
+    } // End of post
+} // End of pipeline
