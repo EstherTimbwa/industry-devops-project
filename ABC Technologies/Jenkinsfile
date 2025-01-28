@@ -81,8 +81,8 @@ pipeline {
                     sh '''
                     export KUBECONFIG=$KUBERNETES_CONFIG
                     ls -la
-                    kubectl apply -f deployment.yml
-                    kubectl apply -f service.yml
+                    kubectl apply -f "ABC Technologies/deploy/deployment.yml"
+                    kubectl apply -f "ABC Technologies/deploy/service.yml"
                     '''
                 }
             }
